@@ -5,9 +5,20 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const auth = require('../middleware/auth');
 
 
-route.get('/', async(req, res) => {
+route.get('/me', auth, async(req, res) => {
+    try {
+        if (!req) return res.status(401).send("Access denied...");
+
+        res.send(req.user)
+    } catch (e) {
+        res.status(500).send(e.message);
+    }
+});
+
+route.get('/', auth, async(req, res) => {
     try {
         const users = await User.find({});
         res.send(users);
