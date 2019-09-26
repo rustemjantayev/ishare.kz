@@ -1,0 +1,5 @@
+{
+    "jwtPrivatekey": "app_jwtPrivateKey",
+    "mongoDb": "app_mongoDb",
+    "saltAround": "app_saltAround"
+}
