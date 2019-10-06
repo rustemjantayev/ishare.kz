@@ -1,13 +1,13 @@
 const express = require('express');
 const route = express.Router();
-const { validateUser, User } = require('../models/user');
+const { validateUser, User, validateUpUser } = require('../models/user');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const auth = require('../middleware/auth');
 
-
+//returns curreent user
 route.get('/me', auth, async(req, res) => {
     try {
         if (!req) return res.status(401).send("Access denied...");
@@ -18,15 +18,26 @@ route.get('/me', auth, async(req, res) => {
     }
 });
 
-route.get('/', auth, async(req, res) => {
+
+route.get('/:username', auth, async(req, res) => {
     try {
-        const users = await User.find({});
+        const users = await User.findOne({ username: req.params.username }).select('username');
+
         res.send(users);
     } catch (e) {
         res.status(500).send(e.message);
     }
 })
 
+route.put('/me', auth, async(req, res) => {
+    const { error } = validateUpUser(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    console.log(req.user)
+    const user = await User.updateOne({ _id: req.user.id }, { $set: req.body });
+
+
+    res.send(user);
+})
 
 route.post('/', async(req, res) => {
     try {
@@ -44,5 +55,7 @@ route.post('/', async(req, res) => {
         res.status(500).send(e.message)
     }
 });
+
+
 
 module.exports = route

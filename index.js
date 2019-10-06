@@ -26,7 +26,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny')) // monitoring
 
+//user route
 app.use('/api/v1/user', user);
+
+//Autentification
 app.use('/api/v1/auth', auth);
 
 app.listen(port, () => {

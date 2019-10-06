@@ -8,7 +8,24 @@ function validateUser(user) {
         username: Joi.string().min(5).max(25).required(),
         email: Joi.string().email().required(),
         password: Joi.string().required().min(10),
-        admin: Joi.boolean().default(false)
+        admin: Joi.boolean().default(false),
+        21: Joi.boolean().default(false),
+        51: Joi.boolean().default(false),
+        101: Joi.boolean().default(false),
+        201: Joi.boolean().default(false),
+        501: Joi.boolean().default(false)
+    });
+}
+
+function validateUpUser(user) {
+    return Joi.validate(user, {
+        username: Joi.string().min(5).max(25).required(),
+        email: Joi.string().email().required(),
+        21: Joi.boolean().default(false),
+        51: Joi.boolean().default(false),
+        101: Joi.boolean().default(false),
+        201: Joi.boolean().default(false),
+        501: Joi.boolean().default(false)
     });
 }
 
@@ -46,3 +63,4 @@ const User = mongoose.model('Users', userSchema);
 
 module.exports.validateUser = validateUser;
 module.exports.User = User;
+module.exports.validateUpUser = validateUpUser;
